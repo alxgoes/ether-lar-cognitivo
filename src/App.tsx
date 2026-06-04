@@ -11,6 +11,7 @@ import { HistoryModal } from './components/HistoryModal';
 import { ContactModal } from './components/ContactModal';
 import { DocumentModal } from './components/DocumentModal';
 import { AudioPlayer } from './components/AudioPlayer';
+import { ManifestoModal } from './components/ManifestoModal';
 
 // ─── Custom Cursor ────────────────────────────────────────────────────────
 function CustomCursor() {
@@ -96,8 +97,10 @@ function App() {
   const [isDragging, setIsDragging] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryInitialTab, setGalleryInitialTab] = useState<string | undefined>(undefined);
+  // Modals state
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isManifestoOpen, setIsManifestoOpen] = useState(false);
   const [openDoc, setOpenDoc] = useState<'privacidade' | 'termos' | 'compliance' | null>(null);
 
   // Track the maximum scrollable width
@@ -254,10 +257,13 @@ function App() {
           }}
         >
           {/* Panel 1: Hero */}
-          <HeroPanel onStartJourney={() => {
-            const panelStart = (100 / 100) * (typeof window !== 'undefined' ? window.innerWidth : 1920);
-            rawX.set(-panelStart);
-          }} />
+          <HeroPanel 
+            onStartJourney={() => {
+              const panelStart = (100 / 100) * (typeof window !== 'undefined' ? window.innerWidth : 1920);
+              rawX.set(-panelStart);
+            }} 
+            onOpenManifesto={() => setIsManifestoOpen(true)}
+          />
 
           {/* Panel 2: Feature */}
           <FeaturePanel />
@@ -276,11 +282,10 @@ function App() {
       {/* Gallery Modal — rendered at root level, outside transformed track */}
       <GalleryModal isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} initialTab={galleryInitialTab} />
       
-      {/* History Modal */}
+      {/* Modals outside the scroll track */}
       <HistoryModal isOpen={isHistoryOpen} onClose={() => setIsHistoryOpen(false)} />
-
-      {/* Contact Modal */}
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      <ManifestoModal isOpen={isManifestoOpen} onClose={() => setIsManifestoOpen(false)} />
 
       {/* Document Modal */}
       <DocumentModal documentId={openDoc} onClose={() => setOpenDoc(null)} />

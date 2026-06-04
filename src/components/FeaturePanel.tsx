@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Brain, Layers, ShieldCheck, X } from 'lucide-react';
 
@@ -11,8 +12,8 @@ const PILLARS = [
       'O lar aprende os seus padrões de comportamento e adapta o ambiente proativamente. Sem comandos. Sem apps. Sem fricção.',
     color: '#3b82f6',
     modalContent: {
-      diferencial: 'O lar aprende padrões em tempo real usando IA local avançada, sem depender de servidores em nuvem lentos ou invasivos.',
-      beneficio: 'O sistema se antecipa a você, criando um ambiente perfeitamente ajustado às suas necessidades de forma natural, para que você não precise mais usar botões ou criar rotinas manuais.'
+      fundamentos: 'O lar aprende padrões em tempo real usando IA local avançada, sem depender de servidores em nuvem lentos ou invasivos.',
+      privilegios: 'O sistema se antecipa a você, criando um ambiente perfeitamente ajustado às suas necessidades de forma natural, para que você não precise mais usar botões ou criar rotinas manuais.'
     }
   },
   {
@@ -23,8 +24,8 @@ const PILLARS = [
       'Cada dado permanece no seu hardware. Criptografia AES-256, rede air-gapped opcional e auditoria completa de logs locais.',
     color: '#60a5fa',
     modalContent: {
-      diferencial: 'Arquitetura air-gapped nativa. Diferente dos sistemas comuns de mercado, seus dados nunca saem da sua casa para a internet.',
-      beneficio: 'Segurança absoluta. Sinta-se verdadeiramente à vontade no seu lar, sabendo que suas conversas, hábitos e horários são 100% privados.'
+      fundamentos: 'Arquitetura air-gapped nativa. Diferente dos sistemas comuns de mercado, seus dados nunca saem da sua casa para a internet.',
+      privilegios: 'Segurança absoluta. Sinta-se verdadeiramente à vontade no seu lar, sabendo que suas conversas, hábitos e horários são 100% privados.'
     }
   },
   {
@@ -35,8 +36,8 @@ const PILLARS = [
       'Você possui cada camada da stack — do hardware ao modelo de IA. Sem dependências de cloud, sem termos invasivos, sem kill switches.',
     color: '#93c5fd',
     modalContent: {
-      diferencial: 'Você possui e controla o hardware e o software. Sem assinaturas obrigatórias e sem risco de a fabricante desligar o servidor e inutilizar sua casa.',
-      beneficio: 'Uma casa inteligente à prova de falhas. A internet caiu? Sua casa continua funcionando 100% com as mesmas capacidades.',
+      fundamentos: 'Você possui e controla o hardware e o software. Sem assinaturas obrigatórias e sem risco de a fabricante desligar o servidor e inutilizar sua casa.',
+      privilegios: 'Uma casa inteligente à prova de falhas. A internet caiu? Sua casa continua funcionando 100% com as mesmas capacidades.',
       valor: 'Independência total. É um investimento em um patrimônio tecnológico que pertence única e exclusivamente a você, projetado para durar.'
     }
   },
@@ -94,19 +95,19 @@ export function FeaturePanel() {
               border: '1px solid rgba(59, 130, 246, 0.3)'
             }}
           >
-            O que será sua casa?
+            Como será sua casa?
           </p>
           <h2
             className="text-headline"
             style={{ maxWidth: '800px', color: 'rgba(255,255,255,0.92)', fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.2 }}
           >
-            Sua casa não receberá ordens, ela{' '}
+            Sem botões.<br />
             <span style={{ color: '#60a5fa' }}>
-              pensará como você.
+              Sem aplicativos.
             </span>
             <br />
             <span style={{ color: 'rgba(255,255,255,0.45)' }}>
-              Deixe que ela aprenda com você.
+              Sem esforço.
             </span>
           </h2>
         </motion.div>
@@ -196,7 +197,7 @@ export function FeaturePanel() {
                 >
                   {pillar.description}
                 </p>
-                
+
                 <span style={{ fontSize: '0.85rem', color: pillar.color, fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   Ver detalhes <span style={{ fontSize: '1.2rem' }}>→</span>
                 </span>
@@ -207,91 +208,94 @@ export function FeaturePanel() {
       </div>
 
       {/* Detail Modal */}
-      <AnimatePresence>
-        {activeFeature && activePillar && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            data-drag-zone="true"
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 9000,
-              background: 'rgba(0,0,0,0.9)',
-              backdropFilter: 'blur(20px)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '2rem'
-            }}
-            onClick={() => setActiveFeature(null)}
-          >
+      {typeof document !== 'undefined' ? createPortal(
+        <AnimatePresence>
+          {activeFeature && activePillar && (
             <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              data-drag-zone="true"
               style={{
-                maxWidth: '600px',
-                width: '100%',
-                background: 'rgba(15,15,15,0.9)',
-                border: `1px solid ${activePillar.color}30`,
-                borderRadius: '24px',
-                padding: '3rem',
-                position: 'relative',
-                boxShadow: `0 20px 80px rgba(0,0,0,0.8), 0 0 40px ${activePillar.color}15`,
+                position: 'fixed',
+                inset: 0,
+                zIndex: 9000,
+                background: 'rgba(0,0,0,0.9)',
+                backdropFilter: 'blur(20px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '2rem'
               }}
+              onClick={() => setActiveFeature(null)}
             >
-              <button
-                onClick={() => setActiveFeature(null)}
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                onClick={(e) => e.stopPropagation()}
                 style={{
-                  position: 'absolute', top: '1.5rem', right: '1.5rem',
-                  width: '36px', height: '36px', borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.05)', border: 'none', color: '#fff',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
+                  maxWidth: '600px',
+                  width: '100%',
+                  background: 'rgba(15,15,15,0.9)',
+                  border: `1px solid ${activePillar.color}30`,
+                  borderRadius: '24px',
+                  padding: '3rem',
+                  position: 'relative',
+                  boxShadow: `0 20px 80px rgba(0,0,0,0.8), 0 0 40px ${activePillar.color}15`,
                 }}
               >
-                <X size={18} />
-              </button>
+                <button
+                  onClick={() => setActiveFeature(null)}
+                  style={{
+                    position: 'absolute', top: '1.5rem', right: '1.5rem',
+                    width: '36px', height: '36px', borderRadius: '50%',
+                    background: 'rgba(255,255,255,0.05)', border: 'none', color: '#fff',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
+                  }}
+                >
+                  <X size={18} />
+                </button>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-                <div style={{ padding: '0.75rem', background: `${activePillar.color}20`, borderRadius: '12px' }}>
-                  <activePillar.icon size={28} color={activePillar.color} />
-                </div>
-                <h3 style={{ fontSize: '2rem', fontWeight: 700, color: '#fff', margin: 0 }}>
-                  {activePillar.title}
-                </h3>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div>
-                  <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: activePillar.color, marginBottom: '0.5rem', fontWeight: 600 }}>Diferencial</h4>
-                  <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.6 }}>
-                    {activePillar.modalContent.diferencial}
-                  </p>
-                </div>
-                
-                <div>
-                  <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: activePillar.color, marginBottom: '0.5rem', fontWeight: 600 }}>Benefício</h4>
-                  <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.6 }}>
-                    {activePillar.modalContent.beneficio}
-                  </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+                  <div style={{ padding: '0.75rem', background: `${activePillar.color}20`, borderRadius: '12px' }}>
+                    <activePillar.icon size={28} color={activePillar.color} />
+                  </div>
+                  <h3 style={{ fontSize: '2rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+                    {activePillar.title}
+                  </h3>
                 </div>
 
-                {activePillar.modalContent.valor && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                   <div>
-                    <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: activePillar.color, marginBottom: '0.5rem', fontWeight: 600 }}>Valor (Por que ter ETHER?)</h4>
+                    <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: activePillar.color, marginBottom: '0.5rem', fontWeight: 600 }}>Fundamentos</h4>
                     <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.6 }}>
-                      {activePillar.modalContent.valor}
+                      {activePillar.modalContent.fundamentos}
                     </p>
                   </div>
-                )}
-              </div>
+
+                  <div>
+                    <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: activePillar.color, marginBottom: '0.5rem', fontWeight: 600 }}>Privilégios</h4>
+                    <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.6 }}>
+                      {activePillar.modalContent.privilegios}
+                    </p>
+                  </div>
+
+                  {activePillar.modalContent.valor && (
+                    <div>
+                      <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: activePillar.color, marginBottom: '0.5rem', fontWeight: 600 }}>Valor (Por que ter ETHER?)</h4>
+                      <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.6 }}>
+                        {activePillar.modalContent.valor}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      ) : null}
     </section>
   );
 }

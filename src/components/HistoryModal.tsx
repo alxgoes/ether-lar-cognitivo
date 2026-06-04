@@ -44,6 +44,7 @@ export function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          data-drag-zone="true"
           style={{
             position: 'fixed',
             inset: 0,
@@ -113,12 +114,19 @@ export function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
                 justifyContent: 'center'
               }}>
                 <h3 style={{ fontSize: '2rem', color: '#fff', marginBottom: '1.5rem', fontWeight: 600 }}>Nossa Origem</h3>
-                <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.8, fontSize: '1.1rem', marginBottom: '1.5rem' }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
-                <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.8, fontSize: '1.1rem' }}>
-                  Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam. Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi.
-                </p>
+                <div style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.8, fontSize: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <p>Quando éramos mais jovens, nossos olhos brilhavam diante das telas de cinema. Assistíamos a heróis habitando refúgios tecnológicos que pareciam ler mentes, e prometemos a nós mesmos que, um dia, traríamos aquela magia para o mundo real.</p>
+                  <p>Mas o futuro chegou, e o mercado nos entregou uma decepção.</p>
+                  <p>O que chamam por aí de “casa inteligente” é, na verdade, uma ilusão frágil. Tentaram convencer o mundo de que o ápice da modernidade era viver com o celular nas mãos, caçando botões em aplicativos engessados para acender uma luz. Isso não é inteligência. É burocracia digital. É transformar o morador em escravo da própria casa.</p>
+                  <p>Percebemos, ali, uma oportunidade de ouro. Olhamos para o lado e vimos uma indústria saturada de produtos de prateleira. Empresas copiando e colando o mesmo procedimento padronizado em endereços diferentes, esquecendo-se de uma verdade fundamental: a automação pode ser replicada, mas cada lar possui uma alma inteiramente única.</p>
+                  <p>Nossa missão nasceu desse inconformismo. Decidimos devolver a alma à alta arquitetura.</p>
+                  <p>Nós não criamos sistemas para serem gerenciados; nós criamos engenharia para servir. Nossos clientes não precisam implorar por comandos de voz ou clicar em telas para que o ambiente mude. Eles têm a liberdade de apenas existir, enquanto a casa se molda, em silêncio absoluto, à sua maneira de viver.</p>
+                  <p>Para tornar esse nível de sofisticação real, nós não reinventamos a roda. Nós fomos ao mercado, selecionamos cirurgicamente o que há de melhor e mais avançado no planeta e fundimos tudo em uma solução proprietária, sob medida e estritamente confidencial.</p>
+                  <p>Para nós, a sua privacidade vem em primeiro lugar. Isso significa que os hábitos, os segredos e a rotina da sua família pertencem a um único lugar: dentro das suas paredes. Criamos uma fortaleza física offline, sem qualquer contato com o mundo externo ou vulnerabilidades de nuvem. O resultado não é apenas o conforto supremo ou a produtividade implacável. É a paz inegociável da Segurança.</p>
+                  <p>Cada projeto que assinamos é uma obra de arte irreplicável. Porque a sua família é única. Porque o seu legado é único. Porque você é único.</p>
+                  <p>O conceito de Casa Cognitiva é uma declaração de soberania: a sua tecnologia deve servir a você. Nunca o contrário.</p>
+                  <p>Bem-vindo ao início da era pós-telas.<br/>Bem-vindo à ETHER.</p>
+                </div>
               </div>
 
             </div>

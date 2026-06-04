@@ -65,7 +65,7 @@ function StatusBadge() {
 // ─── Highlight Word ───────────────────────────────────────────────────────
 function Highlight({ children }: { children: React.ReactNode }) {
   return (
-    <motion.span 
+    <motion.span
       className="text-gradient inline-block"
       whileHover={{ textShadow: '0 0 20px rgba(96,165,250,0.6)' }}
       style={{ cursor: 'default' }}
@@ -105,7 +105,7 @@ function FeaturePills() {
 }
 
 // ─── CTA Button ───────────────────────────────────────────────────────────
-function CTAButton({ onStartJourney }: { onStartJourney?: () => void }) {
+function CTAButton({ onStartJourney, onOpenManifesto }: { onStartJourney?: () => void, onOpenManifesto?: () => void }) {
   return (
     <motion.div
       custom={0.75}
@@ -138,6 +138,7 @@ function CTAButton({ onStartJourney }: { onStartJourney?: () => void }) {
       </motion.button>
 
       <motion.button
+        onClick={onOpenManifesto}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         style={{
@@ -158,9 +159,10 @@ function CTAButton({ onStartJourney }: { onStartJourney?: () => void }) {
 // ─── Hero Panel ───────────────────────────────────────────────────────────
 interface HeroPanelProps {
   onStartJourney?: () => void;
+  onOpenManifesto?: () => void;
 }
 
-export function HeroPanel({ onStartJourney }: HeroPanelProps) {
+export function HeroPanel({ onStartJourney, onOpenManifesto }: HeroPanelProps) {
   return (
     <section
       className="panel"
@@ -215,12 +217,12 @@ export function HeroPanel({ onStartJourney }: HeroPanelProps) {
             marginBottom: '1rem'
           }}
         >
-          Deixe a sua casa pensar por você.<br />
-          A facilidade não precisa de comando.
+          Seu lar não precisa de comandos.<br />
+          Ele entende o seu contexto.
         </motion.p>
 
 
-        <CTAButton onStartJourney={onStartJourney} />
+        <CTAButton onStartJourney={onStartJourney} onOpenManifesto={onOpenManifesto} />
       </div>
 
       {/* Scroll indicator */}

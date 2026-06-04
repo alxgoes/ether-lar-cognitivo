@@ -3,10 +3,10 @@ import { Github, Twitter, Globe, Mail, ArrowLeft } from 'lucide-react';
 
 // ─── Data ─────────────────────────────────────────────────────────────────
 const TEAM = [
-  { name: 'Alex Goes', role: 'Chief Integration Officer', area: 'Infraestrutura Tecnológica & Automação Avançada' },
-  { name: 'Alisson Teodoro', role: 'Chief Systems Architect', area: 'Sistemas Cognitivos & IA Local' },
-  { name: 'Felipe Frois', role: 'Operations & Deployment', area: 'Gestão de Obras & Integração de Projetos' },
-  { name: 'Cristian Narumia', role: 'Chief Revenue Officer', area: 'Estratégia Comercial & Expansão' },
+  { name: 'Alex Goes', role: 'Integration Architect', area: 'Infraestrutura Tecnológica & Automação Avançada' },
+  { name: 'Alisson Teodoro', role: 'Systems Architect', area: 'Sistemas Cognitivos & IA Local' },
+  { name: 'Cristian Narumia', role: 'Revenue & Compliance', area: 'Branding & Customer Journey' },
+  { name: 'Felipe Frois', role: 'Customer Relationship', area: 'Imersão & UX' },
 ];
 
 const LINKS = [
@@ -196,7 +196,7 @@ export function CreditsPanel({ onOpenDoc }: CreditsPanelProps) {
           className="flex flex-col md:flex-row items-center gap-6 md:gap-8 justify-between"
         >
           <p className="text-center md:text-left" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.2)' }}>
-            © 2025 Ether Technologies · Todos os direitos reservados
+            © 2026 Ether Technologies · Todos os direitos reservados
           </p>
 
           <div style={{ display: 'flex', gap: '1.5rem' }}>
