@@ -3,12 +3,10 @@ import { Github, Twitter, Globe, Mail, ArrowLeft } from 'lucide-react';
 
 // ─── Data ─────────────────────────────────────────────────────────────────
 const TEAM = [
-  { name: 'Sofia Carvalho', role: 'Chief Architect', area: 'Sistemas de IA Local' },
-  { name: 'Lucas Mendes', role: 'Hardware Lead', area: 'Infraestrutura Física' },
-  { name: 'Ama Okoro', role: 'Privacy Engineer', area: 'Criptografia & Segurança' },
-  { name: 'Rafael Sato', role: 'Experience Design', area: 'Interface & Interação' },
-  { name: 'Ingrid Neves', role: 'Protocol Specialist', area: 'Zigbee & Redes Locais' },
-  { name: 'Dante Ferreira', role: 'ML Researcher', area: 'Modelos de Linguagem' },
+  { name: 'Alex Goes', role: 'Chief Integration Officer', area: 'Infraestrutura Tecnológica & Automação Avançada' },
+  { name: 'Alisson Teodoro', role: 'Chief Systems Architect', area: 'Sistemas Cognitivos & IA Local' },
+  { name: 'Felipe Frois', role: 'Operations & Deployment', area: 'Gestão de Obras & Integração de Projetos' },
+  { name: 'Cristian Narumia', role: 'Chief Revenue Officer', area: 'Estratégia Comercial & Expansão' },
 ];
 
 const LINKS = [
@@ -26,21 +24,17 @@ const fadeUp = (delay = 0) => ({
   viewport: { once: true },
 });
 
+// ─── Props ────────────────────────────────────────────────────────────────
+interface CreditsPanelProps {
+  onOpenDoc: (doc: 'privacidade' | 'termos' | 'compliance') => void;
+}
+
 // ─── Credits Panel ────────────────────────────────────────────────────────
-export function CreditsPanel() {
+export function CreditsPanel({ onOpenDoc }: CreditsPanelProps) {
   return (
     <section
-      className="panel"
+      className="panel w-full md:!w-[100vw]"
       id="credits"
-      style={{
-        width: '100vw',
-        height: '100vh',
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden',
-      }}
     >
       {/* Background radial glow */}
       <div
@@ -134,12 +128,7 @@ export function CreditsPanel() {
             Equipe Fundadora
           </p>
           <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '1rem 3rem',
-              textAlign: 'left',
-            }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-x-12 text-left"
           >
             {TEAM.map((member, i) => (
               <motion.div
@@ -200,40 +189,48 @@ export function CreditsPanel() {
         <motion.div
           {...fadeUp(0.55)}
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '2rem',
             borderTop: '1px solid rgba(255,255,255,0.05)',
             paddingTop: '2rem',
             width: '100%',
-            justifyContent: 'space-between',
           }}
+          className="flex flex-col md:flex-row items-center gap-6 md:gap-8 justify-between"
         >
-          <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.2)' }}>
+          <p className="text-center md:text-left" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.2)' }}>
             © 2025 Ether Technologies · Todos os direitos reservados
           </p>
 
           <div style={{ display: 'flex', gap: '1.5rem' }}>
-            {['Privacidade', 'Termos', 'Segurança'].map((item) => (
-              <motion.a
-                key={item}
-                href="#"
-                whileHover={{ color: 'rgba(255,255,255,0.6)' }}
-                style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.2)', textDecoration: 'none' }}
-              >
-                {item}
-              </motion.a>
-            ))}
+            <motion.button
+              onClick={() => onOpenDoc('privacidade')}
+              whileHover={{ color: 'rgba(255,255,255,0.6)' }}
+              style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.2)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            >
+              Privacidade
+            </motion.button>
+            <motion.button
+              onClick={() => onOpenDoc('termos')}
+              whileHover={{ color: 'rgba(255,255,255,0.6)' }}
+              style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.2)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            >
+              Termos
+            </motion.button>
+            <motion.button
+              onClick={() => onOpenDoc('compliance')}
+              whileHover={{ color: 'rgba(255,255,255,0.6)' }}
+              style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.2)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            >
+              Compliance & LGPD
+            </motion.button>
           </div>
 
           <motion.div
             style={{
-              display: 'flex',
               alignItems: 'center',
               gap: '0.4rem',
               fontSize: '0.72rem',
               color: 'rgba(255,255,255,0.2)',
             }}
+            className="hidden md:flex"
           >
             <ArrowLeft size={12} />
             <span>Scroll para voltar</span>

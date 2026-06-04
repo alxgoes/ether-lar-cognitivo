@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const NAV_LINKS = ['Filosofia', 'Tecnologia', 'Manifesto'] as const;
+const NAV_LINKS = ['História', 'Tecnologia', 'Contato', 'Quem somos nós'] as const;
 
 // ─── Navbar Component ─────────────────────────────────────────────────────
-export function Navbar() {
+export function Navbar({ onNavClick }: { onNavClick?: (link: string) => void }) {
   const [scrolled, setScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState<string | null>(null);
 
@@ -52,37 +52,41 @@ export function Navbar() {
         {/* Logo */}
         <motion.div
           whileHover={{ scale: 1.05 }}
+          onClick={() => onNavClick?.('logo')}
           style={{
             marginRight: '0.5rem',
             display: 'flex',
             alignItems: 'center',
+            cursor: 'pointer',
           }}
         >
           <img src="/nomelog.png" alt="Logo" style={{ height: '34px', objectFit: 'contain' }} />
         </motion.div>
 
-        {/* Divider */}
-        <div
-          style={{
-            width: '1px',
-            height: '18px',
-            background: 'rgba(255,255,255,0.1)',
-            marginRight: '0.5rem',
-          }}
-        />
-
-        {/* Nav Links */}
-        {NAV_LINKS.map((link) => (
-          <NavLink
-            key={link}
-            label={link}
-            isActive={activeLink === link}
-            onHover={(active) => setActiveLink(active ? link : null)}
+        {/* Nav Links & Divider - hidden on mobile */}
+        <div className="hidden md:flex items-center">
+          <div
+            style={{
+              width: '1px',
+              height: '18px',
+              background: 'rgba(255,255,255,0.1)',
+              marginRight: '0.5rem',
+            }}
           />
-        ))}
+          {NAV_LINKS.map((link) => (
+            <NavLink
+              key={link}
+              label={link}
+              isActive={activeLink === link}
+              onHover={(active) => setActiveLink(active ? link : null)}
+              onClick={() => onNavClick?.(link)}
+            />
+          ))}
+        </div>
 
         {/* CTA Button */}
         <motion.button
+          onClick={() => onNavClick?.('Iniciar Jornada')}
           whileHover={{
             scale: 1.04,
             boxShadow: '0 0 20px rgba(255,255,255,0.15)',
@@ -113,14 +117,19 @@ interface NavLinkProps {
   label: string;
   isActive: boolean;
   onHover: (active: boolean) => void;
+  onClick?: () => void;
 }
 
-function NavLink({ label, isActive, onHover }: NavLinkProps) {
+function NavLink({ label, isActive, onHover, onClick }: NavLinkProps) {
   return (
     <motion.a
       href="#"
       onMouseEnter={() => onHover(true)}
       onMouseLeave={() => onHover(false)}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick?.();
+      }}
       style={{
         position: 'relative',
         padding: '0.45rem 0.9rem',

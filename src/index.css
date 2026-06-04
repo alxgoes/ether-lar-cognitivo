@@ -62,6 +62,12 @@ body {
   transition: transform 0.15s ease, background 0.3s ease;
 }
 
+@media (pointer: coarse), (max-width: 768px) {
+  #cursor-dot, #cursor-ring {
+    display: none !important;
+  }
+}
+
 #cursor-ring {
   width: 36px;
   height: 36px;
@@ -100,14 +106,14 @@ body.cursor-drag #cursor-ring {
 
 /* ─── Typography Scale ─── */
 .text-display {
-  font-size: clamp(2.5rem, 5vw, 5.5rem);
+  font-size: clamp(2rem, 5vw, 5.5rem);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.04em;
 }
 
 .text-headline {
-  font-size: clamp(1.8rem, 3vw, 3.25rem);
+  font-size: clamp(1.5rem, 3vw, 3.25rem);
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.03em;
@@ -198,6 +204,30 @@ body::before {
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .panel {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100vh;
+    padding: 4rem 1rem 2rem 1rem;
+    overflow: visible;
+  }
+  
+  #horizontal-scroll-root {
+    position: relative !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+  
+  #panels-track {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: auto !important;
+    transform: none !important;
+  }
+}
+
 /* ─── Animated gradient border ─── */
 @keyframes border-spin {
   to { --border-angle: 360deg; }
@@ -228,9 +258,15 @@ body::before {
 }
 
 /* ─── Gallery open: hide site chrome ─── */
-body.gallery-open #site-navbar,
-body.gallery-open #scroll-dots {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 0.25s ease;
-}
+  body.gallery-open #site-navbar,
+  body.gallery-open #scroll-dots {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.25s ease;
+  }
+  
+  @media (max-width: 768px) {
+    #scroll-dots {
+      display: none !important;
+    }
+  }

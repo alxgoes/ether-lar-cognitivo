@@ -7,6 +7,10 @@ import { FeaturePanel } from './components/FeaturePanel';
 import { InteractiveDeck } from './components/InteractiveDeck';
 import { GalleryModal } from './components/GalleryModal';
 import { CreditsPanel } from './components/CreditsPanel';
+import { HistoryModal } from './components/HistoryModal';
+import { ContactModal } from './components/ContactModal';
+import { DocumentModal } from './components/DocumentModal';
+import { AudioPlayer } from './components/AudioPlayer';
 
 // ─── Custom Cursor ────────────────────────────────────────────────────────
 function CustomCursor() {
@@ -71,8 +75,8 @@ function CustomCursor() {
 }
 
 // ─── Panel widths — keep in sync with component definitions ───────────────
-// Panel 1: 100vw, Panel 2: 100vw, Panel 3: 50vw, Panel 4: 100vw  → total 350vw
-const TOTAL_WIDTH_VW = 350;
+// Panel 1: 100vw, Panel 2: 100vw, Panel 3: 100vw, Panel 4: 100vw  → total 400vw
+const TOTAL_WIDTH_VW = 400;
 
 // ─── App ──────────────────────────────────────────────────────────────────
 function App() {
@@ -88,8 +92,13 @@ function App() {
 
   // Expose numeric offset for NeuralCanvas camera parallax
   const [scrollOffset, setScrollOffset] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [galleryInitialTab, setGalleryInitialTab] = useState<string | undefined>(undefined);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [openDoc, setOpenDoc] = useState<'privacidade' | 'termos' | 'compliance' | null>(null);
 
   // Track the maximum scrollable width
   const maxScrollRef = useRef(0);
@@ -109,6 +118,8 @@ function App() {
     (e: WheelEvent) => {
       // Allow vertical scroll within card deck area for drag
       if ((e.target as Element)?.closest('[data-drag-zone]')) return;
+
+      if (window.innerWidth <= 768) return;
 
       e.preventDefault();
       const delta = e.deltaX !== 0 ? e.deltaX : e.deltaY;
@@ -140,6 +151,7 @@ function App() {
     const onTouchMove = (e: TouchEvent) => {
       const dx = touchStartX.current - e.touches[0].clientX;
       const dy = Math.abs(touchStartY.current - e.touches[0].clientY);
+      if (window.innerWidth <= 768) return;
       if (Math.abs(dx) > dy) {
         e.preventDefault();
         const current = rawX.get();
@@ -162,7 +174,10 @@ function App() {
   // Subscribe to smoothX to update scrollOffset for parallax
   useEffect(() => {
     const unsub = smoothX.on('change', (v) => {
-      setScrollOffset(Math.abs(v));
+      const absV = Math.abs(v);
+      setScrollOffset(absV);
+      const vw = typeof window !== 'undefined' ? window.innerWidth : 1920;
+      setActiveIndex(Math.round(absV / vw));
     });
     return unsub;
   }, [smoothX]);
@@ -196,7 +211,24 @@ function App() {
 
       {/* Fixed Navbar */}
       <div id="site-navbar" style={{ transition: 'opacity 0.25s ease' }}>
-        <Navbar />
+        <Navbar onNavClick={(link) => {
+          if (link === 'História') {
+            setIsHistoryOpen(true);
+          } else if (link === 'logo') {
+            rawX.set(0);
+          } else if (link === 'Iniciar Jornada') {
+            const panelStart = (100 / 100) * (typeof window !== 'undefined' ? window.innerWidth : 1920);
+            rawX.set(-panelStart);
+          } else if (link === 'Tecnologia') {
+            const panelStart = (200 / 100) * (typeof window !== 'undefined' ? window.innerWidth : 1920);
+            rawX.set(-panelStart);
+          } else if (link === 'Contato') {
+            setIsContactOpen(true);
+          } else if (link === 'Quem somos nós') {
+            const panelStart = (300 / 100) * (typeof window !== 'undefined' ? window.innerWidth : 1920);
+            rawX.set(-panelStart);
+          }
+        }} />
       </div>
 
       {/* Horizontal Scroll Root */}
@@ -222,21 +254,39 @@ function App() {
           }}
         >
           {/* Panel 1: Hero */}
-          <HeroPanel />
+          <HeroPanel onStartJourney={() => {
+            const panelStart = (100 / 100) * (typeof window !== 'undefined' ? window.innerWidth : 1920);
+            rawX.set(-panelStart);
+          }} />
 
           {/* Panel 2: Feature */}
           <FeaturePanel />
 
           {/* Panel 3: Interactive Deck (150vw wide) */}
-          <InteractiveDeck onOpenGallery={() => setIsGalleryOpen(true)} />
+          <InteractiveDeck onOpenGallery={(tab) => {
+            setGalleryInitialTab(tab);
+            setIsGalleryOpen(true);
+          }} />
 
           {/* Panel 4: Credits (100vw) */}
-          <CreditsPanel />
+          <CreditsPanel onOpenDoc={setOpenDoc} />
         </motion.div>
       </div>
 
       {/* Gallery Modal — rendered at root level, outside transformed track */}
-      <GalleryModal isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} />
+      <GalleryModal isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} initialTab={galleryInitialTab} />
+      
+      {/* History Modal */}
+      <HistoryModal isOpen={isHistoryOpen} onClose={() => setIsHistoryOpen(false)} />
+
+      {/* Contact Modal */}
+      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+
+      {/* Document Modal */}
+      <DocumentModal documentId={openDoc} onClose={() => setOpenDoc(null)} />
+
+      {/* Audio Player */}
+      <AudioPlayer />
 
       {/* Scroll progress indicator */}
       <motion.div
@@ -252,7 +302,7 @@ function App() {
         }}
       >
         {[0, 1, 2, 3].map((i) => {
-          const panelWidths = [100, 100, 50, 100];
+          const panelWidths = [100, 100, 100, 100];
           const panelStartVW = panelWidths.slice(0, i).reduce((a, b) => a + b, 0);
           const panelStart = (panelStartVW / 100) * (typeof window !== 'undefined' ? window.innerWidth : 1920);
 
@@ -262,11 +312,14 @@ function App() {
               onClick={() => {
                 rawX.set(-panelStart);
               }}
+              animate={{
+                width: i === activeIndex ? 24 : 6,
+                background: i === activeIndex ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.25)',
+              }}
+              transition={{ duration: 0.3 }}
               style={{
-                width: i === 2 ? 24 : 6,
                 height: 6,
                 borderRadius: 99,
-                background: 'rgba(255,255,255,0.25)',
                 border: 'none',
                 cursor: 'pointer',
                 padding: 0,
