@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Brain, Layers, ShieldCheck, X } from 'lucide-react';
+import { ParallaxCard } from './ParallaxCard';
+import { PrivacyCounter } from './PrivacyCounter';
+import { FloorPlanSVG } from './FloorPlanSVG';
 
 const PILLARS = [
   {
@@ -52,6 +55,7 @@ export function FeaturePanel() {
     <section
       className="panel"
       id="features"
+      style={{ overflowY: 'hidden', alignItems: 'flex-start', padding: 0 }}
     >
       {/* Background gradient */}
       <div
@@ -61,17 +65,33 @@ export function FeaturePanel() {
           background:
             'radial-gradient(ellipse 40% 50% at 60% 50%, rgba(30,90,180,0.12) 0%, transparent 100%)',
           pointerEvents: 'none',
+          zIndex: 0,
         }}
       />
 
+      {/* Scrollable inner container — vertical scroll for extra content */}
       <div
+        data-drag-zone="true"
         style={{
-          position: 'relative',
-          zIndex: 1,
-          maxWidth: '1100px',
-          width: '100%',
+          position: 'absolute',
+          inset: 0,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          display: 'flex',
+          justifyContent: 'center',
+          paddingTop: '6rem',
+          paddingBottom: '4rem',
         }}
-        className="px-0 md:px-16"
+      >
+
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            maxWidth: '1100px',
+            width: '100%',
+          }}
+          className="px-0 md:px-16"
       >
         {/* Section header */}
         <motion.div
@@ -117,22 +137,10 @@ export function FeaturePanel() {
           {PILLARS.map((pillar, i) => {
             const Icon = pillar.icon;
             return (
-              <motion.div
+              <ParallaxCard
                 key={pillar.title}
+                glowColor={`${pillar.color}40`}
                 onClick={() => setActiveFeature(pillar.id)}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 70,
-                  damping: 18,
-                  delay: i * 0.12,
-                }}
-                whileHover={{
-                  y: -6,
-                  boxShadow: `0 12px 40px ${pillar.color}40`,
-                  transition: { type: 'spring', stiffness: 300 },
-                }}
                 style={{
                   padding: '2rem',
                   background: 'rgba(10,10,10,0.6)',
@@ -143,67 +151,84 @@ export function FeaturePanel() {
                   boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
                   position: 'relative',
                   overflow: 'hidden',
-                  cursor: 'pointer',
                 }}
               >
-                {/* Glow spot */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '-30%',
-                    left: '-10%',
-                    width: '60%',
-                    height: '60%',
-                    background: `radial-gradient(circle, ${pillar.color}12, transparent 70%)`,
-                    pointerEvents: 'none',
-                  }}
-                />
-
-                <div
-                  style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '12px',
-                    background: `${pillar.color}15`,
-                    border: `1px solid ${pillar.color}25`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '1.25rem',
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 70,
+                    damping: 18,
+                    delay: i * 0.12,
                   }}
                 >
-                  <Icon size={20} color={pillar.color} />
-                </div>
+                  {/* Glow spot */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '-30%',
+                      left: '-10%',
+                      width: '60%',
+                      height: '60%',
+                      background: `radial-gradient(circle, ${pillar.color}12, transparent 70%)`,
+                      pointerEvents: 'none',
+                    }}
+                  />
 
-                <h3
-                  style={{
-                    fontSize: '1.1rem',
-                    fontWeight: 600,
-                    letterSpacing: '-0.02em',
-                    color: '#ffffff',
-                    marginBottom: '0.75rem',
-                  }}
-                >
-                  {pillar.title}
-                </h3>
+                  <div
+                    style={{
+                      width: '44px',
+                      height: '44px',
+                      borderRadius: '12px',
+                      background: `${pillar.color}15`,
+                      border: `1px solid ${pillar.color}25`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: '1.25rem',
+                    }}
+                  >
+                    <Icon size={20} color={pillar.color} />
+                  </div>
 
-                <p
-                  style={{
-                    fontSize: '0.9rem',
-                    lineHeight: 1.65,
-                    color: 'rgba(255,255,255,0.45)',
-                    marginBottom: '1.5rem'
-                  }}
-                >
-                  {pillar.description}
-                </p>
+                  <h3
+                    style={{
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
+                      letterSpacing: '-0.02em',
+                      color: '#ffffff',
+                      marginBottom: '0.75rem',
+                    }}
+                  >
+                    {pillar.title}
+                  </h3>
 
-                <span style={{ fontSize: '0.85rem', color: pillar.color, fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  Ver detalhes <span style={{ fontSize: '1.2rem' }}>→</span>
-                </span>
-              </motion.div>
+                  <p
+                    style={{
+                      fontSize: '0.9rem',
+                      lineHeight: 1.65,
+                      color: 'rgba(255,255,255,0.45)',
+                      marginBottom: '1.5rem'
+                    }}
+                  >
+                    {pillar.description}
+                  </p>
+
+                  <span style={{ fontSize: '0.85rem', color: pillar.color, fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    Ver detalhes <span style={{ fontSize: '1.2rem' }}>→</span>
+                  </span>
+                </motion.div>
+              </ParallaxCard>
             );
           })}
+        </div>
+
+        {/* Privacy Counter */}
+        <PrivacyCounter />
+
+        {/* Floor Plan sub-section */}
+        <FloorPlanSVG />
         </div>
       </div>
 

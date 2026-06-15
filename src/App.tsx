@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { NeuralCanvas } from './components/NeuralCanvas';
 import { HeroPanel } from './components/HeroPanel';
@@ -12,68 +12,8 @@ import { ContactModal } from './components/ContactModal';
 import { DocumentModal } from './components/DocumentModal';
 import { AudioPlayer } from './components/AudioPlayer';
 import { ManifestoModal } from './components/ManifestoModal';
-
-// ─── Custom Cursor ────────────────────────────────────────────────────────
-function CustomCursor() {
-  const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
-
-  const dotX = useMotionValue(0);
-  const dotY = useMotionValue(0);
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      dotX.set(e.clientX);
-      dotY.set(e.clientY);
-    };
-    window.addEventListener('mousemove', onMove, { passive: true });
-    return () => window.removeEventListener('mousemove', onMove);
-  }, [dotX, dotY]);
-
-  return (
-    <>
-      <motion.div
-        id="cursor-dot"
-        ref={dotRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: 6,
-          height: 6,
-          borderRadius: '50%',
-          background: '#ffffff',
-          pointerEvents: 'none',
-          zIndex: 9999,
-          x: dotX,
-          y: dotY,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
-      />
-      <motion.div
-        id="cursor-ring"
-        ref={ringRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: 36,
-          height: 36,
-          borderRadius: '50%',
-          border: '1px solid rgba(255,255,255,0.45)',
-          background: 'transparent',
-          pointerEvents: 'none',
-          zIndex: 9998,
-          x: dotX,
-          y: dotY,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
-      />
-    </>
-  );
-}
+import { BioluminescentCursor } from './components/BioluminescentCursor';
+import { EtherWaveDivider } from './components/EtherWaveDivider';
 
 // ─── Panel widths — keep in sync with component definitions ───────────────
 // Panel 1: 100vw, Panel 2: 100vw, Panel 3: 100vw, Panel 4: 100vw  → total 400vw
@@ -105,6 +45,14 @@ function App() {
 
   // Track the maximum scrollable width
   const maxScrollRef = useRef(0);
+
+  // Scroll-driven gradient: interpolate background from midnight → petrol as user scrolls
+  // We use a large range; maxScroll is updated dynamically so we use a wide fixed range
+  const bgColor = useTransform(
+    smoothX,
+    [-4000, -2000, 0],
+    ['#030d1a', '#020814', '#020210']
+  );
 
   useEffect(() => {
     const updateMax = () => {
@@ -206,8 +154,19 @@ function App() {
 
   return (
     <>
-      {/* Custom cursor */}
-      <CustomCursor />
+      {/* Bioluminescent cursor with particle trail */}
+      <BioluminescentCursor />
+
+      {/* Scroll-driven background gradient overlay */}
+      <motion.div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: bgColor,
+          zIndex: -2,
+          pointerEvents: 'none',
+        }}
+      />
 
       {/* Fixed neural background */}
       <NeuralCanvas scrollOffset={scrollOffset} />
@@ -257,25 +216,36 @@ function App() {
           }}
         >
           {/* Panel 1: Hero */}
-          <HeroPanel 
-            onStartJourney={() => {
-              const panelStart = (100 / 100) * (typeof window !== 'undefined' ? window.innerWidth : 1920);
-              rawX.set(-panelStart);
-            }} 
-            onOpenManifesto={() => setIsManifestoOpen(true)}
-          />
+          <div style={{ position: 'relative', flexShrink: 0, width: '100vw' }}>
+            <HeroPanel 
+              onStartJourney={() => {
+                const panelStart = (100 / 100) * (typeof window !== 'undefined' ? window.innerWidth : 1920);
+                rawX.set(-panelStart);
+              }} 
+              onOpenManifesto={() => setIsManifestoOpen(true)}
+            />
+            <EtherWaveDivider side="right" />
+          </div>
 
           {/* Panel 2: Feature */}
-          <FeaturePanel />
+          <div style={{ position: 'relative', flexShrink: 0, width: '100vw' }}>
+            <FeaturePanel />
+            <EtherWaveDivider side="right" color="rgba(52, 211, 153, 0.25)" />
+          </div>
 
-          {/* Panel 3: Interactive Deck (150vw wide) */}
-          <InteractiveDeck onOpenGallery={(tab) => {
-            setGalleryInitialTab(tab);
-            setIsGalleryOpen(true);
-          }} />
+          {/* Panel 3: Interactive Deck */}
+          <div style={{ position: 'relative', flexShrink: 0, width: '100vw' }}>
+            <InteractiveDeck onOpenGallery={(tab) => {
+              setGalleryInitialTab(tab);
+              setIsGalleryOpen(true);
+            }} />
+            <EtherWaveDivider side="right" color="rgba(167, 139, 250, 0.25)" />
+          </div>
 
-          {/* Panel 4: Credits (100vw) */}
-          <CreditsPanel onOpenDoc={setOpenDoc} />
+          {/* Panel 4: Credits */}
+          <div style={{ position: 'relative', flexShrink: 0, width: '100vw' }}>
+            <CreditsPanel onOpenDoc={setOpenDoc} />
+          </div>
         </motion.div>
       </div>
 

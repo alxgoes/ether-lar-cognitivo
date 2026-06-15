@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { ArrowRight, Shield, Cpu, Wifi } from 'lucide-react';
+import { EtherTerminal } from './EtherTerminal';
 
 // ─── Animation Variants ───────────────────────────────────────────────────
 const blurReveal = {
@@ -94,10 +95,10 @@ function FeaturePills() {
       {FEATURES.map(({ icon: Icon, label }) => (
         <div
           key={label}
-          className="flex items-center gap-2 px-4 py-2 rounded-full glass-light"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full glass-light whitespace-nowrap"
         >
           <Icon size={13} className="text-white/50" />
-          <span className="text-sm text-white/60 font-medium">{label}</span>
+          <span className="text-[13px] text-white/60 font-medium">{label}</span>
         </div>
       ))}
     </motion.div>
@@ -119,8 +120,8 @@ function CTAButton({ onStartJourney, onOpenManifesto }: { onStartJourney?: () =>
         whileHover={{ scale: 1.03, boxShadow: '0 0 40px rgba(255,255,255,0.2)' }}
         whileTap={{ scale: 0.97 }}
         style={{
-          display: 'flex', alignItems: 'center', gap: '0.6rem',
-          padding: '0.75rem 1.5rem', borderRadius: '99px',
+          display: 'flex', alignItems: 'center', gap: '0.5rem',
+          padding: '0.65rem 1.25rem', borderRadius: '99px',
           background: '#fff', color: '#000', border: 'none',
           fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer',
           whiteSpace: 'nowrap'
@@ -143,8 +144,8 @@ function CTAButton({ onStartJourney, onOpenManifesto }: { onStartJourney?: () =>
         whileTap={{ scale: 0.98 }}
         style={{
           display: 'flex', alignItems: 'center', gap: '0.5rem',
-          padding: '0.75rem 1.5rem', borderRadius: '99px',
-          background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.8)', border: '1px solid rgba(255,255,255,0.1)',
+          padding: '0.65rem 1.25rem', borderRadius: '99px',
+          background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.9)', border: '1px solid rgba(255,255,255,0.15)',
           fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer',
           backdropFilter: 'blur(10px)',
           whiteSpace: 'nowrap'
@@ -174,55 +175,72 @@ export function HeroPanel({ onStartJourney, onOpenManifesto }: HeroPanelProps) {
           position: 'absolute',
           inset: 0,
           background:
-            'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(60,120,220,0.12) 0%, transparent 100%)',
+            'radial-gradient(ellipse 60% 60% at 40% 50%, rgba(60,120,220,0.14) 0%, transparent 70%)',
           pointerEvents: 'none',
         }}
       />
 
+      {/* Two-column layout: text left, terminal right */}
       <div
         style={{
           position: 'relative',
           zIndex: 1,
-          maxWidth: '860px',
-          padding: '0 2rem',
           width: '100%',
+          maxWidth: '1200px',
+          padding: '0 2rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4rem',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
         }}
       >
-        {/* ETHER Logo */}
-        <motion.div
-          custom={0.05}
-          initial="hidden"
-          animate="visible"
-          variants={blurReveal}
-          style={{ marginBottom: '2rem' }}
+        {/* Left: text content */}
+        <div style={{ flex: '1 1 420px', minWidth: 0 }}>
+          {/* ETHER Logo */}
+          <motion.div
+            custom={0.05}
+            initial="hidden"
+            animate="visible"
+            variants={blurReveal}
+            style={{ marginBottom: '2rem' }}
+          >
+            <img src="/nomelog.png" alt="ETHER" style={{ height: '130px', objectFit: 'contain' }} />
+          </motion.div>
+
+          <StatusBadge />
+
+          {/* Main headline — blur reveal */}
+          <motion.p
+            custom={0.15}
+            initial="hidden"
+            animate="visible"
+            variants={blurReveal}
+            style={{
+              fontWeight: 400,
+              fontSize: '1.75rem',
+              lineHeight: 1.4,
+              letterSpacing: '-0.01em',
+              color: 'rgba(255,255,255,0.7)',
+              maxWidth: '520px',
+              marginBottom: '1rem'
+            }}
+          >
+            Seu lar não precisa de comandos.<br />
+            Ele entende o seu contexto.
+          </motion.p>
+
+          <CTAButton onStartJourney={onStartJourney} onOpenManifesto={onOpenManifesto} />
+          <FeaturePills />
+        </div>
+
+        {/* Right: AI Terminal */}
+        <div
+          style={{ flex: '1 1 380px', minWidth: 0, display: 'flex', justifyContent: 'center' }}
+          className="hidden md:flex"
         >
-          <img src="/nomelog.png" alt="ETHER" style={{ height: '130px', objectFit: 'contain' }} />
-        </motion.div>
-
-        <StatusBadge />
-
-        {/* Main headline — blur reveal */}
-        <motion.p
-          custom={0.15}
-          initial="hidden"
-          animate="visible"
-          variants={blurReveal}
-          style={{
-            fontWeight: 400,
-            fontSize: '1.75rem',
-            lineHeight: 1.4,
-            letterSpacing: '-0.01em',
-            color: 'rgba(255,255,255,0.7)',
-            maxWidth: '600px',
-            marginBottom: '1rem'
-          }}
-        >
-          Seu lar não precisa de comandos.<br />
-          Ele entende o seu contexto.
-        </motion.p>
-
-
-        <CTAButton onStartJourney={onStartJourney} onOpenManifesto={onOpenManifesto} />
+          <EtherTerminal />
+        </div>
       </div>
 
       {/* Scroll indicator */}
@@ -232,8 +250,9 @@ export function HeroPanel({ onStartJourney, onOpenManifesto }: HeroPanelProps) {
         transition={{ delay: 1.6, duration: 1 }}
         style={{
           position: 'absolute',
-          bottom: '2.5rem',
-          right: '3rem',
+          bottom: '2rem',
+          left: '50%',
+          translateX: '-50%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
