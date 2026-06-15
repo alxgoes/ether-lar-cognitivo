@@ -1,4 +1,4 @@
-import { motion, useTime, useTransform } from 'framer-motion';
+import { motion, useTime, useTransform, MotionValue } from 'framer-motion';
 
 interface EtherWaveDividerProps {
   /** Side of the panel where the divider sits */
@@ -76,7 +76,7 @@ function WavePath({
   phaseOffset = 0,
 }: {
   color: string;
-  phase: ReturnType<typeof useTransform>;
+  phase: MotionValue<number>;
   amplitude: number;
   speed: number;
   strokeWidth: number;

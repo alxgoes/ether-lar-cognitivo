@@ -69,10 +69,11 @@ export function FloorPlanSVG() {
     });
   }
 
+  const litArray = Array.from(litRooms);
   const activeRoom = hoveredRoom
     ? ROOMS.find((r) => r.id === hoveredRoom)
-    : litRooms.size > 0
-    ? ROOMS.find((r) => litRooms.has(r.id) && r.id === [...litRooms].at(-1))
+    : litArray.length > 0
+    ? ROOMS.find((r) => r.id === litArray[litArray.length - 1])
     : null;
 
   return (
