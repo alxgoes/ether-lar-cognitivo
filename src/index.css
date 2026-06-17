@@ -42,6 +42,23 @@ body {
   user-select: none;
 }
 
+@media (max-width: 768px) {
+  html {
+    overflow: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+  }
+
+  body {
+    overflow: auto;
+    overflow-x: hidden;
+    cursor: auto;
+    user-select: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+}
+
 /* ─── Custom Cursor ─── */
 #cursor-dot,
 #cursor-ring {
@@ -205,26 +222,40 @@ body::before {
 }
 
 @media (max-width: 768px) {
+  /* Mobile: panels become simple block containers */
   .panel {
     width: 100% !important;
     height: auto !important;
-    min-height: 100vh;
-    padding: 4rem 1rem 2rem 1rem;
+    min-height: 100dvh;
+    position: relative;
     overflow: visible;
+    padding: 5rem 1.5rem 3rem;
   }
-  
+
   #horizontal-scroll-root {
     position: relative !important;
     overflow: visible !important;
     height: auto !important;
+    width: 100% !important;
   }
-  
+
   #panels-track {
     display: flex !important;
     flex-direction: column !important;
     width: 100% !important;
     height: auto !important;
     transform: none !important;
+  }
+
+  #scroll-dots {
+    display: none !important;
+  }
+
+  /* Prevent horizontal overflow on mobile */
+  #features {
+    width: 100% !important;
+    height: auto !important;
+    flex-direction: column !important;
   }
 }
 

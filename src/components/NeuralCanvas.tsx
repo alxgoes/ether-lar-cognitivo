@@ -4,7 +4,8 @@ import * as THREE from 'three';
 import { useMousePosition } from '@/hooks/useMousePosition';
 
 // ─── Configuration Constants ───────────────────────────────────────────────
-const NODE_COUNT = 180;
+const isMobileDevice = () => typeof window !== 'undefined' && window.innerWidth <= 768;
+const NODE_COUNT = isMobileDevice() ? 60 : 180;
 const CONNECTION_DISTANCE = 130;
 const INTERACTION_RADIUS = 250;
 const ATTRACTION_STRENGTH = 0.015;

@@ -376,6 +376,7 @@ export function GalleryContent({ activeTab }: { activeTab: string }) {
   return (
     <motion.div
       key={activeTab}
+      data-drag-zone="true"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3 }}

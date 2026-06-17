@@ -87,7 +87,6 @@ export function PrivacyCounter() {
       transition={{ type: 'spring', stiffness: 60, damping: 20, delay: 0.2 }}
       style={{
         width: '100%',
-        marginTop: '4rem',
         padding: '2.5rem',
         background: 'rgba(5, 10, 25, 0.7)',
         backdropFilter: 'blur(24px)',

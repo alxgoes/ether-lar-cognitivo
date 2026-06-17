@@ -2,113 +2,104 @@ import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 // ─── Room definitions ──────────────────────────────────────────────────────
-// Each room corresponds to a feature. They light up in sequence.
 const ROOMS = [
   {
     id: 'sala',
     label: 'Sala',
     feature: 'Controle de iluminação adaptativa',
     color: '#60a5fa',
-    // SVG rect params
-    x: 30, y: 30, width: 140, height: 100,
+    x: 20, y: 20, width: 115, height: 82,
   },
   {
     id: 'cozinha',
     label: 'Cozinha',
     feature: 'Sensores de gás e temperatura',
     color: '#34d399',
-    x: 185, y: 30, width: 95, height: 100,
+    x: 148, y: 20, width: 82, height: 82,
   },
   {
     id: 'quarto',
-    label: 'Quarto Principal',
+    label: 'Quarto',
     feature: 'Rotina de sono inteligente',
     color: '#a78bfa',
-    x: 30, y: 145, width: 100, height: 105,
+    x: 20, y: 115, width: 84, height: 88,
   },
   {
     id: 'escritorio',
     label: 'Escritório',
     feature: 'Modo foco — silêncio e clima',
     color: '#f59e0b',
-    x: 145, y: 145, width: 135, height: 105,
+    x: 116, y: 115, width: 114, height: 88,
   },
   {
     id: 'banheiro',
     label: 'Banheiro',
     feature: 'Aquecimento preditivo',
     color: '#38bdf8',
-    x: 30, y: 265, width: 75, height: 70,
+    x: 20, y: 215, width: 62, height: 58,
   },
   {
     id: 'corredor',
     label: 'Corredor',
     feature: 'Detecção de presença e rota',
     color: '#fb923c',
-    x: 120, y: 265, width: 160, height: 70,
+    x: 94, y: 215, width: 136, height: 58,
   },
 ];
+
+// SVG viewBox constants — scaled-down floor plan
+const SVG_W = 250;
+const SVG_H = 290;
 
 // ─── FloorPlanSVG ──────────────────────────────────────────────────────────
 export function FloorPlanSVG() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: false, margin: '-100px' });
+  const isInView = useInView(sectionRef, { once: false, margin: '-60px' });
 
   const [hoveredRoom, setHoveredRoom] = useState<string | null>(null);
   const [litRooms, setLitRooms] = useState<Set<string>>(new Set());
 
   // Light up rooms one by one when section enters view
   const hasStartedRef = useRef(false);
-
   if (isInView && !hasStartedRef.current) {
     hasStartedRef.current = true;
     ROOMS.forEach((room, i) => {
       setTimeout(() => {
-        setLitRooms((prev) => new Set([...prev, room.id]));
-      }, i * 400 + 200);
+        setLitRooms(prev => new Set([...prev, room.id]));
+      }, i * 350 + 150);
     });
   }
-
-  const litArray = Array.from(litRooms);
-  const activeRoom = hoveredRoom
-    ? ROOMS.find((r) => r.id === hoveredRoom)
-    : litArray.length > 0
-    ? ROOMS.find((r) => r.id === litArray[litArray.length - 1])
-    : null;
 
   return (
     <div
       ref={sectionRef}
-      style={{
-        width: '100%',
-        marginTop: '5rem',
-        padding: '0 0 2rem',
-      }}
+      style={{ width: '100%' }}
     >
-      {/* Section label */}
+      {/* Section label — compact header */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 70, damping: 18 }}
-        style={{ marginBottom: '2.5rem' }}
+        style={{ marginBottom: '1.25rem' }}
       >
         <p
           style={{
-            fontSize: '0.72rem',
+            fontSize: '0.68rem',
             letterSpacing: '0.15em',
             textTransform: 'uppercase',
             color: 'rgba(255,255,255,0.3)',
-            marginBottom: '0.5rem',
+            marginBottom: '0.3rem',
           }}
         >
           Planta Cognitiva
         </p>
         <h3
           style={{
-            fontSize: 'clamp(1.4rem, 2.5vw, 2rem)',
+            fontSize: 'clamp(1.1rem, 1.8vw, 1.5rem)',
             fontWeight: 600,
             color: 'rgba(255,255,255,0.85)',
             letterSpacing: '-0.02em',
+            lineHeight: 1.2,
           }}
         >
           Cada espaço tem{' '}
@@ -116,59 +107,53 @@ export function FloorPlanSVG() {
         </h3>
       </motion.div>
 
+      {/* SVG + Room list — side by side, no wrapping */}
       <div
         style={{
           display: 'flex',
-          gap: '3rem',
+          gap: '1.75rem',
           alignItems: 'flex-start',
-          flexWrap: 'wrap',
+          flexWrap: 'nowrap',
         }}
       >
-        {/* Floor plan SVG */}
+        {/* Floor plan SVG — scaled down */}
         <div
           style={{
-            position: 'relative',
-            flex: '0 0 auto',
-            filter: 'drop-shadow(0 0 30px rgba(96,165,250,0.08))',
+            flexShrink: 0,
+            filter: 'drop-shadow(0 0 24px rgba(96,165,250,0.1))',
           }}
         >
           <svg
-            width="310"
-            height="360"
-            viewBox="0 0 310 360"
-            style={{ overflow: 'visible' }}
+            width={SVG_W}
+            height={SVG_H}
+            viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+            style={{ overflow: 'visible', display: 'block' }}
           >
             {/* Outer walls */}
             <rect
-              x="20"
-              y="20"
-              width="270"
-              height="325"
-              rx="6"
+              x="12"
+              y="12"
+              width="226"
+              height="264"
+              rx="5"
               fill="none"
               stroke="rgba(255,255,255,0.15)"
-              strokeWidth="2"
+              strokeWidth="1.5"
             />
 
             {/* Interior walls */}
-            {/* Vertical: sala | cozinha */}
-            <line x1="180" y1="20" x2="180" y2="135" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
-            {/* Horizontal: top | bottom half */}
-            <line x1="20" y1="140" x2="290" y2="140" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
-            {/* Vertical: quarto | escritorio */}
-            <line x1="140" y1="140" x2="140" y2="260" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
-            {/* Horizontal: mid | lower */}
-            <line x1="20" y1="260" x2="290" y2="260" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
-            {/* Vertical: banheiro | corredor */}
-            <line x1="110" y1="260" x2="110" y2="345" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
+            <line x1="148" y1="12" x2="148" y2="110" stroke="rgba(255,255,255,0.1)" strokeWidth="1.2" />
+            <line x1="12" y1="110" x2="238" y2="110" stroke="rgba(255,255,255,0.1)" strokeWidth="1.2" />
+            <line x1="116" y1="110" x2="116" y2="210" stroke="rgba(255,255,255,0.1)" strokeWidth="1.2" />
+            <line x1="12" y1="210" x2="238" y2="210" stroke="rgba(255,255,255,0.1)" strokeWidth="1.2" />
+            <line x1="94" y1="210" x2="94" y2="276" stroke="rgba(255,255,255,0.1)" strokeWidth="1.2" />
 
             {/* Door arcs */}
-            <path d="M 180 20 A 20 20 0 0 1 180 40" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-            <path d="M 20 100 A 20 20 0 0 0 40 100" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-            <path d="M 140 200 A 20 20 0 0 1 160 200" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+            <path d="M 148 12 A 16 16 0 0 1 148 28" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="0.8" />
+            <path d="M 12 80 A 16 16 0 0 0 28 80" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="0.8" />
 
             {/* Rooms */}
-            {ROOMS.map((room) => {
+            {ROOMS.map(room => {
               const isLit = litRooms.has(room.id);
               const isHovered = hoveredRoom === room.id;
               return (
@@ -181,14 +166,9 @@ export function FloorPlanSVG() {
                     rx="3"
                     fill={room.color}
                     animate={{
-                      fillOpacity: isHovered ? 0.25 : isLit ? 0.12 : 0.02,
-                      filter: isHovered
-                        ? `drop-shadow(0 0 12px ${room.color})`
-                        : isLit
-                        ? `drop-shadow(0 0 6px ${room.color}60)`
-                        : 'none',
+                      fillOpacity: isHovered ? 0.28 : isLit ? 0.13 : 0.02,
                     }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    transition={{ duration: 0.45, ease: 'easeOut' }}
                     onMouseEnter={() => setHoveredRoom(room.id)}
                     onMouseLeave={() => setHoveredRoom(null)}
                     style={{ cursor: 'pointer' }}
@@ -202,28 +182,24 @@ export function FloorPlanSVG() {
                     fill="none"
                     stroke={room.color}
                     animate={{
-                      strokeOpacity: isHovered ? 0.9 : isLit ? 0.45 : 0.08,
+                      strokeOpacity: isHovered ? 0.9 : isLit ? 0.5 : 0.08,
                       strokeWidth: isHovered ? 1.5 : 1,
                     }}
-                    transition={{ duration: 0.5 }}
-                    onMouseEnter={() => setHoveredRoom(room.id)}
-                    onMouseLeave={() => setHoveredRoom(null)}
-                    style={{ cursor: 'pointer', pointerEvents: 'none' }}
+                    transition={{ duration: 0.45 }}
+                    style={{ pointerEvents: 'none' }}
                   />
-
-                  {/* Room label */}
                   <motion.text
                     x={room.x + room.width / 2}
                     y={room.y + room.height / 2}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fontSize="9"
+                    fontSize="8"
                     fontFamily="Inter, sans-serif"
                     fontWeight="600"
-                    letterSpacing="0.08em"
+                    letterSpacing="0.06em"
                     fill={room.color}
-                    animate={{ opacity: isLit ? 0.8 : 0.15 }}
-                    transition={{ duration: 0.5 }}
+                    animate={{ opacity: isLit ? 0.8 : 0.12 }}
+                    transition={{ duration: 0.45 }}
                     style={{ textTransform: 'uppercase', pointerEvents: 'none' }}
                   >
                     {room.label}
@@ -232,13 +208,21 @@ export function FloorPlanSVG() {
               );
             })}
 
-            {/* Compass indicator */}
-            <text x="280" y="345" fontSize="8" fill="rgba(255,255,255,0.2)" textAnchor="middle" fontFamily="Inter">N↑</text>
+            {/* Compass */}
+            <text x="228" y="278" fontSize="7" fill="rgba(255,255,255,0.2)" textAnchor="middle" fontFamily="Inter">N↑</text>
           </svg>
         </div>
 
-        {/* Feature list — appears as rooms light up */}
-        <div style={{ flex: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '0.6rem', paddingTop: '0.5rem' }}>
+        {/* Room list — beside SVG, compact items */}
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.35rem',
+            minWidth: 0,
+          }}
+        >
           {ROOMS.map((room, i) => {
             const isLit = litRooms.has(room.id);
             const isHovered = hoveredRoom === room.id;
@@ -247,17 +231,17 @@ export function FloorPlanSVG() {
                 key={room.id}
                 animate={{
                   opacity: isLit ? 1 : 0.2,
-                  x: isLit ? 0 : -8,
+                  x: isLit ? 0 : -6,
                 }}
-                transition={{ delay: i * 0.08, duration: 0.4 }}
+                transition={{ delay: i * 0.06, duration: 0.35 }}
                 onMouseEnter={() => setHoveredRoom(room.id)}
                 onMouseLeave={() => setHoveredRoom(null)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.6rem 0.9rem',
-                  borderRadius: '10px',
+                  gap: '0.6rem',
+                  padding: '0.45rem 0.7rem',
+                  borderRadius: '8px',
                   background: isHovered ? `${room.color}12` : 'transparent',
                   border: `1px solid ${isHovered ? room.color + '30' : 'transparent'}`,
                   cursor: 'pointer',
@@ -266,20 +250,20 @@ export function FloorPlanSVG() {
               >
                 <div
                   style={{
-                    width: 8,
-                    height: 8,
+                    width: 7,
+                    height: 7,
                     borderRadius: '50%',
                     background: room.color,
                     flexShrink: 0,
-                    boxShadow: isLit ? `0 0 8px ${room.color}` : 'none',
+                    boxShadow: isLit ? `0 0 7px ${room.color}` : 'none',
                     transition: 'box-shadow 0.4s',
                   }}
                 />
-                <div>
-                  <p style={{ fontSize: '0.75rem', fontWeight: 600, color: room.color, marginBottom: '0.1rem' }}>
+                <div style={{ minWidth: 0 }}>
+                  <p style={{ fontSize: '0.72rem', fontWeight: 600, color: room.color, marginBottom: '0.05rem', whiteSpace: 'nowrap' }}>
                     {room.label}
                   </p>
-                  <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.3 }}>
+                  <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.3, whiteSpace: 'nowrap' }}>
                     {room.feature}
                   </p>
                 </div>

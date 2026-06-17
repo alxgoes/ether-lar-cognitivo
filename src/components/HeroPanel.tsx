@@ -106,36 +106,30 @@ function FeaturePills() {
 }
 
 // ─── CTA Button ───────────────────────────────────────────────────────────
-function CTAButton({ onStartJourney, onOpenManifesto }: { onStartJourney?: () => void, onOpenManifesto?: () => void }) {
+function CTAButton({ onStartJourney, onOpenManifesto, isMobile }: { onStartJourney?: () => void, onOpenManifesto?: () => void, isMobile?: boolean }) {
   return (
     <motion.div
       custom={0.75}
       initial="hidden"
       animate="visible"
       variants={fadeUp}
-      style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '2.5rem' }}
+      style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', flexWrap: 'wrap', gap: '0.75rem', marginTop: '2rem' }}
     >
       <motion.button
         onClick={onStartJourney}
         whileHover={{ scale: 1.03, boxShadow: '0 0 40px rgba(255,255,255,0.2)' }}
         whileTap={{ scale: 0.97 }}
         style={{
-          display: 'flex', alignItems: 'center', gap: '0.5rem',
-          padding: '0.65rem 1.25rem', borderRadius: '99px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+          padding: isMobile ? '0.85rem 1.5rem' : '0.65rem 1.25rem',
+          borderRadius: '99px',
           background: '#fff', color: '#000', border: 'none',
-          fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer',
-          whiteSpace: 'nowrap'
+          fontSize: isMobile ? '1rem' : '0.85rem', fontWeight: 600, cursor: 'pointer',
+          width: isMobile ? '100%' : 'auto',
         }}
       >
         Iniciar Jornada
-        <motion.span
-          className="inline-flex"
-          initial={{ x: 0 }}
-          whileHover={{ x: 4 }}
-          transition={{ type: 'spring', stiffness: 300 }}
-        >
-          <ArrowRight size={16} />
-        </motion.span>
+        <ArrowRight size={16} />
       </motion.button>
 
       <motion.button
@@ -143,12 +137,13 @@ function CTAButton({ onStartJourney, onOpenManifesto }: { onStartJourney?: () =>
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         style={{
-          display: 'flex', alignItems: 'center', gap: '0.5rem',
-          padding: '0.65rem 1.25rem', borderRadius: '99px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+          padding: isMobile ? '0.85rem 1.5rem' : '0.65rem 1.25rem',
+          borderRadius: '99px',
           background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.9)', border: '1px solid rgba(255,255,255,0.15)',
-          fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer',
+          fontSize: isMobile ? '1rem' : '0.85rem', fontWeight: 500, cursor: 'pointer',
           backdropFilter: 'blur(10px)',
-          whiteSpace: 'nowrap'
+          width: isMobile ? '100%' : 'auto',
         }}
       >
         Ver Manifesto
@@ -163,11 +158,12 @@ interface HeroPanelProps {
   onOpenManifesto?: () => void;
 }
 
-export function HeroPanel({ onStartJourney, onOpenManifesto }: HeroPanelProps) {
+export function HeroPanel({ onStartJourney, onOpenManifesto, isMobile }: HeroPanelProps) {
   return (
     <section
       className="panel"
       id="hero"
+      style={{ overflow: 'visible' }}
     >
       {/* Radial glow backdrop */}
       <div
@@ -180,37 +176,37 @@ export function HeroPanel({ onStartJourney, onOpenManifesto }: HeroPanelProps) {
         }}
       />
 
-      {/* Two-column layout: text left, terminal right */}
+      {/* Layout */}
       <div
         style={{
           position: 'relative',
           zIndex: 1,
           width: '100%',
-          maxWidth: '1200px',
-          padding: '0 2rem',
+          maxWidth: isMobile ? '100%' : '1200px',
+          padding: isMobile ? '0' : '0 2rem',
           display: 'flex',
-          alignItems: 'center',
-          gap: '4rem',
+          alignItems: isMobile ? 'flex-start' : 'center',
+          gap: isMobile ? '2rem' : '4rem',
+          flexDirection: isMobile ? 'column' : 'row',
           flexWrap: 'wrap',
           justifyContent: 'center',
         }}
       >
-        {/* Left: text content */}
-        <div style={{ flex: '1 1 420px', minWidth: 0 }}>
-          {/* ETHER Logo */}
+        {/* Text content */}
+        <div style={{ flex: '1 1 420px', minWidth: 0, width: '100%' }}>
+          {/* Logo */}
           <motion.div
             custom={0.05}
             initial="hidden"
             animate="visible"
             variants={blurReveal}
-            style={{ marginBottom: '2rem' }}
+            style={{ marginBottom: isMobile ? '1.5rem' : '2rem' }}
           >
-            <img src="/nomelog.png" alt="ETHER" style={{ height: '130px', objectFit: 'contain' }} />
+            <img src="/nomelog.png" alt="ETHER" style={{ height: isMobile ? '90px' : '130px', objectFit: 'contain' }} />
           </motion.div>
 
           <StatusBadge />
 
-          {/* Main headline — blur reveal */}
           <motion.p
             custom={0.15}
             initial="hidden"
@@ -218,60 +214,64 @@ export function HeroPanel({ onStartJourney, onOpenManifesto }: HeroPanelProps) {
             variants={blurReveal}
             style={{
               fontWeight: 400,
-              fontSize: '1.75rem',
+              fontSize: isMobile ? '1.3rem' : '1.75rem',
               lineHeight: 1.4,
               letterSpacing: '-0.01em',
               color: 'rgba(255,255,255,0.7)',
               maxWidth: '520px',
-              marginBottom: '1rem'
+              marginBottom: '1rem',
             }}
           >
             Seu lar não precisa de comandos.<br />
             Ele entende o seu contexto.
           </motion.p>
 
-          <CTAButton onStartJourney={onStartJourney} onOpenManifesto={onOpenManifesto} />
+          <CTAButton onStartJourney={onStartJourney} onOpenManifesto={onOpenManifesto} isMobile={isMobile} />
           <FeaturePills />
         </div>
 
-        {/* Right: AI Terminal */}
-        <div
-          style={{ flex: '1 1 380px', minWidth: 0, display: 'flex', justifyContent: 'center' }}
-          className="hidden md:flex"
-        >
-          <EtherTerminal />
-        </div>
+        {/* Terminal — hidden on mobile */}
+        {!isMobile && (
+          <div
+            style={{ flex: '1 1 380px', minWidth: 0, display: 'flex', justifyContent: 'center' }}
+            className="hidden md:flex"
+          >
+            <EtherTerminal />
+          </div>
+        )}
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 1 }}
-        style={{
-          position: 'absolute',
-          bottom: '2rem',
-          left: '50%',
-          translateX: '-50%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.5rem',
-          color: 'rgba(255,255,255,0.3)',
-        }}
-        className="hidden md:flex"
-      >
-        <span style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-          Role para explorar
-        </span>
+      {/* Scroll indicator — hidden on mobile */}
+      {!isMobile && (
         <motion.div
-          animate={{ x: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-          style={{ fontSize: '1rem' }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.6, duration: 1 }}
+          style={{
+            position: 'absolute',
+            bottom: '2rem',
+            left: '50%',
+            translateX: '-50%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.5rem',
+            color: 'rgba(255,255,255,0.3)',
+          }}
+          className="hidden md:flex"
         >
-          →
+          <span style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+            Role para explorar
+          </span>
+          <motion.div
+            animate={{ x: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+            style={{ fontSize: '1rem' }}
+          >
+            →
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
     </section>
   );
 }
