@@ -156,6 +156,7 @@ function CTAButton({ onStartJourney, onOpenManifesto, isMobile }: { onStartJourn
 interface HeroPanelProps {
   onStartJourney?: () => void;
   onOpenManifesto?: () => void;
+  isMobile?: boolean;
 }
 
 export function HeroPanel({ onStartJourney, onOpenManifesto, isMobile }: HeroPanelProps) {
