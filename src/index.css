@@ -28,37 +28,27 @@
 
 html {
   scroll-behavior: smooth;
-  overflow: hidden;
 }
 
 body {
   font-family: var(--font-sans);
   background-color: #000000;
   color: #f4f4f5;
-  overflow: hidden;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  cursor: none;
-  user-select: none;
 }
 
-@media (max-width: 768px) {
-  html {
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    overscroll-behavior-y: none;
-    height: auto;
-  }
-
+@media (pointer: fine) {
   body {
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    cursor: auto !important;
-    user-select: auto !important;
+    cursor: none;
+    user-select: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  body {
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: none;
-    height: auto;
-    position: relative;
   }
 }
 

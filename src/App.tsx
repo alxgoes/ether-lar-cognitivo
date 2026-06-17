@@ -24,9 +24,9 @@ const PANEL_STOPS_VW = [0, 100, 200, 300, 400];
 
 // ─── Hook: detect mobile ──────────────────────────────────────────────────
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 1024);
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
+    const mq = window.matchMedia('(max-width: 1024px)');
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
@@ -80,7 +80,7 @@ function App() {
   const handleWheel = useCallback(
     (e: WheelEvent) => {
       // Hard guard: NEVER intercept on mobile
-      if (window.innerWidth <= 768) return;
+      if (window.innerWidth <= 1024) return;
 
       const target = e.target as Element;
       const scrollableParent = target?.closest('[data-drag-zone]');
